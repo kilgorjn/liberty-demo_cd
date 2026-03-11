@@ -1,34 +1,48 @@
-- step:
-    name: Download and Deploy EAR
-    identifier: download_deploy_ear
-    type: Command
-    spec:
-      onDelegate: false
-      commandUnits:
-        - identifier: fetch_and_copy
-          name: Fetch EAR from GitHub
-          type: Script
-          spec:
-            shell: Bash
-            source:
-              type: Inline
-              spec:
-                script: |
-                  # Define the target path
-                  TARGET_DIR="/opt/wlp/usr/servers/liberty1/dropins"
-                  FILENAME="liberty-demo-0.0.1-SNAPSHOT.ear"
-                  
-                  # Use the pipeline variable to build the URL
-                  URL="https://github.com/kilgorjn/liberty-demo/releases/download/v<+pipeline.variables.version>/$FILENAME"
-                  
-                  echo "Downloading version <+pipeline.variables.version> from GitHub..."
-                  
-                  # Download directly to the dropins folder
-                  curl -L -o "$TARGET_DIR/$FILENAME" "$URL"
-                  
-                  if [ $? -eq 0 ]; then
-                    echo "Successfully deployed $FILENAME to $TARGET_DIR"
-                  else
-                    echo "Download failed. Please check the version variable or network access."
-                    exit 1
-                  fi
+pipeline:
+  name: Liberty Deploy Pipeline
+  identifier: liberty_deploy_pipeline
+  projectIdentifier: appliberty # Ensure this matches your project ID
+  orgIdentifier: default        # Ensure this matches your org ID
+  tags: {}
+  stages:
+    - stage:
+        name: Deploy Stage
+        identifier: deploy_stage
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: SSH
+          service:
+            serviceRef: <+input>
+          infrastructure:
+            environmentRef: <+input>
+            infrastructureDefinitionRef: <+input>
+          execution:
+            steps:
+              - step:
+                  name: Download and Deploy EAR
+                  identifier: download_deploy_ear
+                  type: Command
+                  spec:
+                    onDelegate: false
+                    commandUnits:
+                      - identifier: fetch_and_copy
+                        name: Fetch EAR from GitHub
+                        type: Script
+                        spec:
+                          shell: Bash
+                          source:
+                            type: Inline
+                            spec:
+                              script: |
+                                TARGET_DIR="/opt/ibm/wlp/usr/servers/defaultServer/dropins"
+                                FILENAME="liberty-demo-0.0.1-SNAPSHOT.ear"
+                                URL="https://github.com<+pipeline.variables.version>/$FILENAME"
+                                
+                                curl -L -o "$TARGET_DIR/$FILENAME" "$URL"
+  variables:
+    - name: version
+      type: String
+      description: "Release version (e.g., 0.0.1)"
+      required: true
+      value: <+input>
