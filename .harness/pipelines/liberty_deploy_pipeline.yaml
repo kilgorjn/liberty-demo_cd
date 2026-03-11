@@ -1,14 +1,13 @@
 pipeline:
   name: Liberty Deploy Pipeline
   identifier: liberty_deploy_pipeline
-  projectIdentifier: appliberty # Ensure this matches your project ID
-  orgIdentifier: default        # Ensure this matches your org ID
+  projectIdentifier: appliberty
+  orgIdentifier: default
   tags: {}
   stages:
     - stage:
         name: Deploy Stage
         identifier: deploy_stage
-        description: ""
         type: Deployment
         spec:
           deploymentType: SSH
@@ -38,11 +37,9 @@ pipeline:
                                 TARGET_DIR="/opt/ibm/wlp/usr/servers/defaultServer/dropins"
                                 FILENAME="liberty-demo-0.0.1-SNAPSHOT.ear"
                                 URL="https://github.com<+pipeline.variables.version>/$FILENAME"
-                                
                                 curl -L -o "$TARGET_DIR/$FILENAME" "$URL"
+            rollbackSteps: [] # Mandatory for Deployment stages
   variables:
     - name: version
       type: String
-      description: "Release version (e.g., 0.0.1)"
-      required: true
       value: <+input>
