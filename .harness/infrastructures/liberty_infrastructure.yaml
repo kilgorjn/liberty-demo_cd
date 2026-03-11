@@ -1,12 +1,15 @@
 infrastructureDefinition:
   name: Liberty Infrastructure
-  identifier: liberty_infrastructure
+  identifier: Liberty_Infrastructure
   orgIdentifier: default
   projectIdentifier: appliberty
   environmentRef: liberty_environment
   deploymentType: Ssh
-  type: PhysicalServer
+  type: Pdc
   spec:
-    hosts:
-      - hostname: <+input>
-  tags: {}
+    connectorRef: liberty_pdc
+    credentialsRef: account.mwwas
+    hostFilter:
+      type: All
+      spec: {}
+  allowSimultaneousDeployments: false

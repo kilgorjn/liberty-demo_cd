@@ -22,7 +22,7 @@ pipeline:
             serviceRef: liberty_ear
           infrastructure:
             environmentRef: liberty_environment
-            infrastructureDefinitionRef: Liberty_Infrastrucutre
+            infrastructureDefinitionRef: Liberty_Infrastructure
           execution:
             steps:
               - step:
