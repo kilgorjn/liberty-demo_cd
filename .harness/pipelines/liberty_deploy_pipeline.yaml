@@ -43,8 +43,8 @@ pipeline:
                               script: |-
                                 TARGET_DIR="/opt/ibm/wlp/usr/servers/defaultServer/dropins"
                                 FILENAME="liberty-demo-0.0.1-SNAPSHOT.ear"
-                                URL="https://github.com<+pipeline.variables.version>/$FILENAME"
-                                
+                                URL="https://github.com/kilgorjn/liberty-demo/releases/download/<+pipeline.variables.version>/$FILENAME"
+
                                 echo "Downloading version <+pipeline.variables.version>..."
                                 curl -L -o "$TARGET_DIR/$FILENAME" "$URL"
             rollbackSteps: []
