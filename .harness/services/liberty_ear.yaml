@@ -4,5 +4,7 @@ service:
   orgIdentifier: default
   projectIdentifier: appliberty
   deploymentType: Ssh
-  spec: {}
+  spec:
+    manifests: []
+    artifacts: []
   tags: {}
