@@ -40,7 +40,6 @@ pipeline:
                           curl -L -o "$TARGET_DIR/$FILENAME" "$URL"
                           echo "Deployment complete"
                     environmentVariables: []
-                    outputVariables: []
                   timeout: 10m
             rollbackSteps: []
         tags: {}
