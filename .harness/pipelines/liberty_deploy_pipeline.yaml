@@ -8,20 +8,27 @@ pipeline:
     - stage:
         name: Deploy Stage
         identifier: deploy_stage
+        description: ""
         type: Deployment
         spec:
-          deploymentType: SSH
+          deploymentType: Ssh
           service:
             serviceRef: <+input>
+            serviceInputs: <+input>
           infrastructure:
             environmentRef: <+input>
             infrastructureDefinitionRef: <+input>
+            infrastructureDetails:
+              type: PhysicalServer
+              spec:
+                hosts: <+input>
           execution:
             steps:
               - step:
                   name: Download and Deploy EAR
                   identifier: download_deploy_ear
                   type: Command
+                  timeout: 10m
                   spec:
                     onDelegate: false
                     commandUnits:
@@ -33,13 +40,17 @@ pipeline:
                           source:
                             type: Inline
                             spec:
-                              script: |
+                              script: |-
                                 TARGET_DIR="/opt/ibm/wlp/usr/servers/defaultServer/dropins"
                                 FILENAME="liberty-demo-0.0.1-SNAPSHOT.ear"
                                 URL="https://github.com<+pipeline.variables.version>/$FILENAME"
+                                
+                                echo "Downloading version <+pipeline.variables.version>..."
                                 curl -L -o "$TARGET_DIR/$FILENAME" "$URL"
-            rollbackSteps: [] # Mandatory for Deployment stages
+            rollbackSteps: []
   variables:
     - name: version
       type: String
+      description: "The version number (e.g. 0.0.1)"
+      required: true
       value: <+input>
