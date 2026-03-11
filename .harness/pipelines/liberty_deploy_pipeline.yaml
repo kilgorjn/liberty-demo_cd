@@ -4,39 +4,34 @@ pipeline:
   projectIdentifier: appliberty
   orgIdentifier: default
   tags: {}
-  variables:
-    - name: version
-      type: String
-      description: The version number (e.g. 0.0.1)
-      required: true
-      value: <+input>
   stages:
     - stage:
         name: Deploy Stage
         identifier: deploy_stage
-        description: Deploy Liberty EAR
+        description: ""
         type: Deployment
         spec:
           deploymentType: Ssh
           service:
             serviceRef: liberty_ear
-          infrastructure:
+          environment:
             environmentRef: liberty_environment
-            infrastructureDefinitionRef: Liberty_Infrastructure
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: Liberty_Infrastructure
           execution:
             steps:
               - step:
+                  type: ShellScript
                   name: Download and Deploy EAR
                   identifier: download_deploy_ear
-                  type: ShellScript
-                  timeout: 10m
                   spec:
                     shell: Bash
-                    onDelegate: true
+                    executionTarget: {}
                     source:
                       type: Inline
                       spec:
-                        script: |
+                        script: |-
                           set -e
                           TARGET_DIR="/opt/ibm/wlp/usr/servers/defaultServer/dropins"
                           FILENAME="liberty-demo-0.0.1-SNAPSHOT.ear"
@@ -44,4 +39,20 @@ pipeline:
                           echo "Downloading version <+pipeline.variables.version>..."
                           curl -L -o "$TARGET_DIR/$FILENAME" "$URL"
                           echo "Deployment complete"
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
             rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
+  variables:
+    - name: version
+      type: String
+      description: ""
+      required: true
+      value: 1.0.1
