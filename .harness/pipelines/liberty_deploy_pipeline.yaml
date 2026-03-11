@@ -14,14 +14,9 @@ pipeline:
           deploymentType: Ssh
           service:
             serviceRef: <+input>
-            serviceInputs: <+input>
           infrastructure:
             environmentRef: <+input>
             infrastructureDefinitionRef: <+input>
-            infrastructureDetails:
-              type: PhysicalServer
-              spec:
-                hosts: <+input>
           execution:
             steps:
               - step:
