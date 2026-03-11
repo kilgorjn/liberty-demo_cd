@@ -19,10 +19,10 @@ pipeline:
         spec:
           deploymentType: Ssh
           service:
-            serviceRef: <+input>
+            serviceRef: liberty_ear
           infrastructure:
-            environmentRef: <+input>
-            infrastructureDefinitionRef: <+input>
+            environmentRef: liberty_environment
+            infrastructureDefinitionRef: liberty_infrastructure
           execution:
             steps:
               - step:

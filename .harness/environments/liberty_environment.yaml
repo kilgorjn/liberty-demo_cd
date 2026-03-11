@@ -1,0 +1,8 @@
+environment:
+  name: Liberty Environment
+  identifier: liberty_environment
+  orgIdentifier: default
+  projectIdentifier: appliberty
+  description: Environment for Liberty application deployment
+  type: Production
+  tags: {}

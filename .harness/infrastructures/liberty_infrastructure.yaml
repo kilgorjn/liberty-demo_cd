@@ -1,0 +1,12 @@
+infrastructureDefinition:
+  name: Liberty Infrastructure
+  identifier: liberty_infrastructure
+  orgIdentifier: default
+  projectIdentifier: appliberty
+  environmentRef: liberty_environment
+  deploymentType: Ssh
+  type: PhysicalServer
+  spec:
+    hosts:
+      - hostname: <+input>
+  tags: {}

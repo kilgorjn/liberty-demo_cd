@@ -1,0 +1,8 @@
+service:
+  name: liberty_ear
+  identifier: liberty_ear
+  orgIdentifier: default
+  projectIdentifier: appliberty
+  deploymentType: Ssh
+  spec: {}
+  tags: {}
