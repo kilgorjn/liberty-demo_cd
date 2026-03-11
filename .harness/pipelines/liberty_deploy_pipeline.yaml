@@ -22,26 +22,21 @@ pipeline:
               - step:
                   name: Download and Deploy EAR
                   identifier: download_deploy_ear
-                  type: Command
+                  type: ShellScript
                   timeout: 10m
                   spec:
-                    onDelegate: false
-                    commandUnits:
-                      - identifier: fetch_and_copy
-                        name: Fetch EAR from GitHub
-                        type: Script
-                        spec:
-                          shell: Bash
-                          source:
-                            type: Inline
-                            spec:
-                              script: |-
-                                TARGET_DIR="/opt/ibm/wlp/usr/servers/defaultServer/dropins"
-                                FILENAME="liberty-demo-0.0.1-SNAPSHOT.ear"
-                                URL="https://github.com/kilgorjn/liberty-demo/releases/download/<+pipeline.variables.version>/$FILENAME"
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |-
+                          TARGET_DIR="/opt/ibm/wlp/usr/servers/defaultServer/dropins"
+                          FILENAME="liberty-demo-0.0.1-SNAPSHOT.ear"
+                          URL="https://github.com/kilgorjn/liberty-demo/releases/download/<+pipeline.variables.version>/$FILENAME"
 
-                                echo "Downloading version <+pipeline.variables.version>..."
-                                curl -L -o "$TARGET_DIR/$FILENAME" "$URL"
+                          echo "Downloading version <+pipeline.variables.version>..."
+                          curl -L -o "$TARGET_DIR/$FILENAME" "$URL"
             rollbackSteps: []
   variables:
     - name: version
